@@ -24,7 +24,7 @@ One approach might be as follows (note: each box represents a different sandboxe
 containerised environment):
 
 <div align="center">
-  <img src="diagrams/architecture.drawio.png" alt="Diagram showing the architecture of the ELT pipeline" width="40%" />
+  <img src="diagrams/architecture.drawio.png" alt="Diagram showing the architecture of the ELT pipeline" width="60%" />
   <p><em>Figure: architecture of the ELT pipeline</em></p>
 </div>
 
