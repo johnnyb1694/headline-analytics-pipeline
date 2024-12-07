@@ -10,8 +10,4 @@ Luckily, the New York Times ("NYT") kindly provides an [API service](https://dev
 
 To keep things simple, the scope of this project is limited to NYT (for now).
 
-## Architecture 🎢
-
-TBC
-
 
