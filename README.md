@@ -1,4 +1,4 @@
-# New York Times - Data Pipeline 📰 🌃
+# New York Times - Data Pipeline ('Newton') 📰 🌃
 
 A data pipeline project dedicated to the extraction &amp; analysis of data from the [New York Times API service](https://developer.nytimes.com/)
 
