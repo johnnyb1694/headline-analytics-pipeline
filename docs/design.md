@@ -23,7 +23,11 @@ of the Archive Search API response.
 One approach might be as follows (note: each box represents a different sandboxed, 
 containerised environment):
 
-![alt text](diagrams/architecture.drawio.png)
+<div align="center">
+  <img src="diagrams/architecture.drawio.png" alt="Diagram showing the architecture of the ELT pipeline" width="40%" />
+  <p><em>Figure: architecture of the ELT pipeline</em></p>
+</div>
+
 
 The basic process is as follows:
 
