@@ -13,10 +13,8 @@ for us automatically.
 */
 
 -----------------
-
-/*
 ---- SCHEMAS ----
-*/
+-----------------
 
 -- Container for all raw data that is 'staged' by the running process
 CREATE SCHEMA raw;
@@ -24,20 +22,22 @@ CREATE SCHEMA raw;
 -- Container for all metadata
 CREATE SCHEMA meta;
 
-/* 
+-------------------
 ---- RELATIONS ----
-*/
+-------------------
 
--- Stores headlines in 'raw' staging format prior to transformation
-CREATE TABLE raw.headline (
-    publication VARCHAR(100) NOT NULL,
-    headline TEXT NOT NULL,
-    url VARCHAR(2083) NOT NULL -- NB: maximum URL length in most browsers
+-- Stores NYT headlines in 'raw' staging format prior to transformation
+CREATE TABLE raw.nyt (
+    headline TEXT,
+    publication_date TIMESTAMP,
+    author VARCHAR(100),
+    news_desk VARCHAR(100),
+    url VARCHAR(2083) -- NB: maximum URL length in most browsers,
 );
 
 -- Logs ELT pipeline metadata 
 CREATE TABLE meta.batch (
-    id SERIAL PRIMARY KEY,
+    batch_id SERIAL PRIMARY KEY,
     created_by VARCHAR(50),
     created_at TIMESTAMP NOT NULL,
     status VARCHAR(20),
