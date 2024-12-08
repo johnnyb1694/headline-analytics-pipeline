@@ -27,10 +27,9 @@ services:
     container_name: newton-db-admin
     restart: always
     secrets:
-      - db-admin-email
       - db-admin-password
     environment:
-      - PGADMIN_DEFAULT_EMAIL=/run/secrets/db-admin-email
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD_FILE=/run/secrets/db-admin-password
     ports:
       - 8888:80
@@ -49,7 +48,5 @@ secrets:
     file: env/DB_NAME.txt
   db-password:
     file: env/DB_PWD.txt
-  db-admin-email:
-    file: env/DB_ADMIN_EMAIL.txt
   db-admin-password:
     file: env/DB_ADMIN_PWD.txt
