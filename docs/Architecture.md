@@ -48,3 +48,5 @@ to eventually expose analytical output stored in the database to other services
 (e.g. some kind of presentation layer), it is easier - and makes more sense - to centralise the 
 database in another container and expose that process to other services. 
 
+
+

@@ -73,8 +73,38 @@ in place, the only way a nefarious third party could gain control of these resou
 they were able to gain control of the deployment host and/or the containers on the host which I have 
 done everything in my power to 'secure' properly.
 
+In addition to the database container, another container is incorporated into the system to enable
+administrative control over the database via the GUI PgAdmin (image: `dpage/pgadmin4`). You can
+see the full configuration inside `docker-compose.yml`.
+
+## Ports
+
+You can spin up the services using `docker compose up -d`. Once this has been done, you can run
+`docker ps` inside your terminal instance to see high-level metadata on each container. 
+
+Most of the information displayed is fairly intuitive, but one part which might confuse somebody
+is the port mappings. For instance, on spinning up the admin container, you will see something like
+this,
+
+```
+443/tcp, 0.0.0.0:8888->80/tcp
+```
+
+To decode what this means: the _container_ exposes ports 443 and 80 (internally) by default. Port
+80, however, has been mapped (by us in our `docker-compose.yml`) to port 8888 on our host machine.
+
+Port 80 is special because it is typically used by web servers to listen for HTTP traffic. In other 
+words, the `pgadmin4` image includes a web server (such as Apache, Nginx, or a lightweight built-in 
+server) to handle HTTP (port 80) and HTTPS (port 443) traffic.
+
+In effect, this means that if we type `localhost:8888` into our browser, this request will be redirected to port 80 on the container and we, in turn, will be redirected to the administrative GUI so that we can inspect our Postgres database. 
+
+You can test all of this by running the Linux command,
+
+`curl http://localhost:8888`
+
 ## Digital Ocean
 
-The entire application is deployed to a single server on Digital Ocean. At a larger scale, you
+The entire application will be deployed to a single server on Digital Ocean. At a larger scale, you
 might decide to decompose the services (e.g. the database layer) across different servers but at 
 this tiny scale, it didn't seem necessary to me!
