@@ -1,6 +1,6 @@
 # Publications Data Pipeline ('Newton') 📰 🌃
 
-A data pipeline project dedicated to the extraction &amp; analysis of headline data from famous publications such as the [New York Times API service](https://developer.nytimes.com/)
+A data pipeline project dedicated to the extraction &amp; analysis of headline data from famous publications such as the [New York Times](https://developer.nytimes.com/)
 
 ## Background 👓 
 
