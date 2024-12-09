@@ -30,7 +30,7 @@ CREATE SCHEMA meta;
 CREATE TABLE raw.nyt (
     headline TEXT,
     publication_date TIMESTAMP,
-    author VARCHAR(100),
+    author VARCHAR(1000),
     news_desk VARCHAR(100),
     url VARCHAR(2083) -- NB: maximum URL length in most browsers,
 );
