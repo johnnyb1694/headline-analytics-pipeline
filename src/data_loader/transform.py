@@ -1,7 +1,7 @@
-"""Transformations executed prior to batch upload.
+"""Transformations executed prior to batch upload. This is the 't' in EtLT.
 
-Note that whilst the 'transformation' piece of the ELT pipeline is primarily delegated to `dbt`,
-some minor transformations take place prior to the initial load.
+Note that whilst the capital T 'transformation' piece of the ELT pipeline is primarily delegated to  
+`dbt`, some minor transformations take place prior to the initial load.
 """
 from datetime import datetime
 

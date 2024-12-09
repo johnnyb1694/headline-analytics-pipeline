@@ -7,7 +7,7 @@ import requests
 import logging
 import csv
 from pathlib import Path
-from transformation import (
+from data_loader.transform import (
     nytas_transform_author,
     nytas_transform_date
 )
@@ -20,7 +20,7 @@ logging.basicConfig(
 )
 
 
-def construct_nyt_archive_search_url(
+def nytas_construct_url(
     year: int,
     month: int,
     version: str = "v1"
@@ -35,7 +35,7 @@ def construct_nyt_archive_search_url(
     return f"https://api.nytimes.com/svc/archive/{version}/{year}/{month}.json"
 
 
-def extract_nyt_archive(
+def nytas_extract_archive(
     api_key: str,
     year: int,
     month: int
@@ -47,7 +47,7 @@ def extract_nyt_archive(
     :param month: month of interest
     :return: a dictionary-encoded collection of name-value pairs in the JSON response
     """
-    url = construct_nyt_archive_search_url(year, month)
+    url = nytas_construct_url(year, month)
     try:
         res = requests.get(url, params={'api-key': api_key})
         res.raise_for_status()
@@ -56,8 +56,8 @@ def extract_nyt_archive(
         logging.error(f"Bad API request to NYT 'Archive Search': '{err}'")   
 
 
-def filter_nyt_archive(
-    res: dict
+def nytas_filter_archive(
+    nyt_archive: dict
 ) -> list[dict]:
     """Filters the NYTAS response on the following relevant fields:
 
@@ -67,11 +67,11 @@ def filter_nyt_archive(
     * `news_desk`
     * `url`
 
-    :param res: JSON encoded response from NYTAS (cf. `extract_nyt_archive()`)
+    :param nyt_archive: JSON encoded response from NYTAS (cf. `nytas_extract_archive()`)
     :return: a filtered dictionary-encoded collection of name-value pairs in the JSON response
     """
     try:
-        articles = res["response"]["docs"]
+        articles = nyt_archive["response"]["docs"]
         return [
             {
                 "headline": article["headline"]["main"],
@@ -83,7 +83,7 @@ def filter_nyt_archive(
             for article in articles
         ]
     except KeyError as err:
-        logging.error(f"Unable to process `res` input (reconsider input structure): '{err}'")
+        logging.error(f"Unable to process `nyt_archive` input (reconsider input structure): '{err}'")
 
 
 def stage(
@@ -101,7 +101,7 @@ def stage(
         writer = csv.DictWriter(fp, fieldnames=field_names, delimiter="|") 
         writer.writeheader() 
         writer.writerows(records)
-
+    
 
 if __name__ == "__main__":
     pass
