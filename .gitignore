@@ -155,7 +155,7 @@ dmypy.json
 cython_debug/
 
 # Staging data
-src/data_loader/staging
+staging/
 *.csv
 
 # PyCharm
