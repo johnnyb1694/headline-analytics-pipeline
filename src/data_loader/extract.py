@@ -6,6 +6,7 @@ Note that "New York Times 'Archive Search'" is often abbreviated to "NYTAS" for 
 import requests
 import logging
 import csv
+from pydantic import BaseModel
 from pathlib import Path
 from data_loader.transform import (
     nytas_transform_author,

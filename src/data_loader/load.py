@@ -1,15 +1,22 @@
 """Loads data from a CSV file into a remote Postgres database instance efficiently with `COPY`
 """
 import psycopg2
+from pydantic import BaseModel
 from pathlib import Path
 
 
-def open_connection(
-    dbname: str,
-    user: str,
-    password: str,
-    host: str = "localhost",
+class DBC(BaseModel):
+    """ Database Configuration ('DBC')
+    """
+    dbname: str
+    user: str
+    password: str
+    host: str = "localhost"
     port: int = 5432
+
+
+def open_connection(
+    dbc: DBC
 ):
     """Open connection to Postgres database.
 
@@ -21,11 +28,11 @@ def open_connection(
     :return: a connection object
     """
     conn_params = { 
-        "dbname": dbname, 
-        "user": user, 
-        "password": password, 
-        "host": host, 
-        "port": str(port)
+        "dbname": dbc.dbname, 
+        "user": dbc.user, 
+        "password": dbc.password, 
+        "host": dbc.host, 
+        "port": str(dbc.port)
     }
     return psycopg2.connect(**conn_params)
 
