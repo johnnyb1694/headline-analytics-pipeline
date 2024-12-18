@@ -6,19 +6,14 @@ Note that "New York Times 'Archive Search'" is often abbreviated to "NYTAS" for 
 import requests
 import logging
 import csv
-from pydantic import BaseModel
 from pathlib import Path
-from data_loader.transform import (
+from .transform import (
     nytas_transform_author,
     nytas_transform_date
 )
 
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
+logger = logging.getLogger(__name__)
 
 
 def nytas_construct_url(
@@ -54,7 +49,7 @@ def nytas_extract_archive(
         res.raise_for_status()
         return res.json()
     except requests.RequestException as err: 
-        logging.error(f"Bad API request to NYT 'Archive Search': '{err}'")   
+        logger.error(f"Bad API request to NYT 'Archive Search': '{err}'")   
 
 
 def nytas_filter_archive(
@@ -84,7 +79,7 @@ def nytas_filter_archive(
             for article in articles
         ]
     except KeyError as err:
-        logging.error(f"Unable to process `nyt_archive` input (reconsider input structure): '{err}'")
+        logger.error(f"Unable to process `nyt_archive` input (reconsider input structure): '{err}'")
 
 
 def stage(
