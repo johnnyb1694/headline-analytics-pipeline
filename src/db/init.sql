@@ -27,12 +27,13 @@ CREATE SCHEMA meta;
 -------------------
 
 -- Stores NYT headlines in 'raw' staging format prior to transformation
-CREATE TABLE raw.nyt (
+CREATE TABLE raw.nytas (
     headline TEXT,
     publication_date TIMESTAMP,
     author VARCHAR(1000),
     news_desk VARCHAR(100),
-    url VARCHAR(2083) -- NB: maximum URL length in most browsers,
+    url VARCHAR(2083), -- NB: maximum URL length in most browsers
+    _etl_loaded_at_date TIMESTAMP DEFAULT NOW()
 );
 
 -- Logs ELT pipeline metadata 
