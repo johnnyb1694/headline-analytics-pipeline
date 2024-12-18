@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: src_nyt
+    description: Archive search data from the New York Times API
+    database: publications
+    schema: raw
+    tables:
+      - name: nyt
+        description: Data extracted from New York Times 'Archive Search' API
+        columns:
+          - name: headline
+            description: News headline reported in the NYT
+          - name: publication_date
+            description: Publication date of news item
+          - name: author
+            description: Author of news item
+          - name: news_desk
+            description: Originating department of news item (i.e. 'category')
+          - name: url
+            description: URL of news item
