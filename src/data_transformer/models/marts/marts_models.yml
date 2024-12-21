@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: headline_terms
+    description: Frequency (through time) of headline terms across various news publications
+    columns:
+      - name: publication
+        description: Name of publication responsible for the headline (term) e.g. 'NYT'
+        tests:
+          - not_null
+      - name: headline_term
+        description: Term belonging to a given headline (as established by headline_id)
+        tests:
+          - not_null
+      - name: stop_word
+        description: Signifies whether the word is a stop word ('1') or not ('0')
+        tests:
+          - not_null
+      - name: publication_date
+        description: Publication date of news item
+        tests:
+          - not_null
+      - name: frequency
+        description: Frequency of headline term for the given publication date

@@ -10,7 +10,7 @@ with versioned_nytas as (
 final as (
 
     select
-        {{ dbt_utils.generate_surrogate_key(['headline', 'url']) }} as headline_id,
+        row_number() over (order by publication_date) as headline_id,
         headline,
         publication_date::DATE,
         coalesce(author, 'Unknown') as author,
