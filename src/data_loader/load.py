@@ -65,7 +65,7 @@ def nytas_load(
                                 news_desk,
                                 url
                             ) FROM STDIN WITH (FORMAT csv, DELIMITER '|', HEADER true);
-                        """
+                          """
             cursor.copy_expert(bulk_insert, staged_csv)
     except psycopg2.errors.DatabaseError as err:
         logger.error(f"Failed to upload staged NYTAS files to Postgres: '{err}'")
