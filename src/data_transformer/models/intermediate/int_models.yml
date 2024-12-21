@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: int_nyt_unnested
+    description: Unnested version of NYT headlines; one headline term per row.
+    columns:
+      - name: headline_id
+        description: Unique ID attributable to each headline (row)
+        tests:
+          - not_null
+          - unique
+      - name: headline_term
+        description: Term belonging to a given headline (as established by headline_id)
+  - name: int_nyt_cleansed
+    description: Filtered & cleansed version of unnested NYT headlines; eliminates useless 'terms' 
+                 (like numbers, null values, possessives and other items of interest).
+    columns:
+      - name: headline_id
+        description: Unique ID attributable to each headline (row)
+        tests:
+          - not_null
+          - unique
+      - name: headline_term
+        description: Term belonging to a given headline (as established by headline_id)

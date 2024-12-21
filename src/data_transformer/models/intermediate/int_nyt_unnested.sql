@@ -13,22 +13,13 @@ split_nyt_headlines as (
 
 ),
 
-unnested_nyt_headlines as (
+unnest_nyt_headlines as (
 
     select 
         headline_id,
         unnest(headline_split) as headline_term
     from split_nyt_headlines
 
-),
-
-final as (
-
-    select 
-        headline_id,
-        headline_term as headline_term
-    from unnested_nyt_headlines
-
 )
 
-select * from final
+select * from unnest_nyt_headlines
