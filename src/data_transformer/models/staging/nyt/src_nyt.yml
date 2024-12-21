@@ -6,7 +6,7 @@ sources:
     database: publications
     schema: raw
     tables:
-      - name: nyt
+      - name: nytas
         description: Data extracted from New York Times 'Archive Search' API
         columns:
           - name: headline
