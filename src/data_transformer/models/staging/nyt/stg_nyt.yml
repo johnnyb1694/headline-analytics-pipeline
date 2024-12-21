@@ -2,13 +2,13 @@ version: 2
 
 models:
   - name: stg_nyt
-    description: Staged archive of archived NYT headlines; one unique headline per row
+    description: Staged archive of NYT headlines; one unique headline per row!
     columns:
       - name: headline_id
         description: Unique ID attributable to each headline (row)
         tests:
-          - unique
           - not_null
+          - unique
       - name: headline
         description: News headline reported in the NYT
       - name: publication_date
@@ -22,5 +22,5 @@ models:
       - name: url
         description: URL of news item
         tests:
+          - not
           - unique
-          - not null
