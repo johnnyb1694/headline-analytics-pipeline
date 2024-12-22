@@ -22,5 +22,5 @@ models:
       - name: url
         description: URL of news item
         tests:
-          - not
+          - not_null
           - unique

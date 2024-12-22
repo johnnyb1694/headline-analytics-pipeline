@@ -1,0 +1,82 @@
+version: 2
+
+models:
+  - name: fct_daily_term_counts
+    description: Frequency (through time) of headline terms by day across various news publications
+    columns:
+      - name: publication
+        description: Name of publication responsible for the headline (term) e.g. 'NYT'
+        tests:
+          - not_null
+      - name: headline_term
+        description: Term belonging to a given headline (as established by headline_id)
+        tests:
+          - not_null
+      - name: stop_word
+        description: Signifies whether the word is a stop word ('1') or not ('0')
+        tests:
+          - not_null
+      - name: publication_date
+        description: Publication date of news item
+        tests:
+          - not_null
+      - name: frequency
+        description: Frequency of headline term for the given publication date
+  - name: fct_daily_counts
+    description: Total frequency of headline terms across each publication date
+    columns:
+      - name: publication
+        description: Name of publication responsible for the headline (term) e.g. 'NYT'
+        tests:
+          - not_null
+      - name: publication_date
+        description: Publication date of news item
+        tests:
+          - not_null
+          - unique
+      - name: total_frequency
+        description: Total frequency of all headline terms for the given publication date
+  - name: fct_term_counts
+    description: Total frequency of headline terms contained within the data warehouse
+    columns:
+      - name: publication
+        description: Name of publication responsible for the headline (term) e.g. 'NYT'
+        tests:
+          - not_null
+      - name: headline_term
+        description: Term belonging to a given headline
+        tests:
+          - not_null
+          - unique
+      - name: total_frequency
+        description: Total frequency of all headline terms for the given headline term
+  - name: fct_logit_inputs
+    description: View containing key inputs required to fit logistic regression (for trending headline topics)
+    columns:
+      - name: publication
+        description: Name of publication responsible for the headline (term) e.g. 'NYT'
+        tests:
+          - not_null
+      - name: headline_term
+        description: Term belonging to a given headline
+        tests:
+          - not_null
+      - name: publication_date
+        description: Publication date of news item
+        tests:
+          - not_null
+      - name: successes
+        description: The frequency that the given `headline_term` appeared on the associated
+                     `publication_date`
+      - name: failures
+        description: The frequency that the given `headline_term` failed to appear on the 
+                     associated `publication_date` (i.e. the frequency of all *other* headline terms)
+      - name: trials
+        description: The total frequency of all terms on the given `publication_date` (i.e. the
+                     the total number of 'chances' that each `headline_term` had to appear)
+      - name: p_estimate
+        description: The frequency that the given `headline_term` appeared on the associated 
+                     `publication_date` *relative* to the total number of `trials` 
+      - name: headline_term_frequency
+        description: Total frequency of the given headline term in the data warehouse
+

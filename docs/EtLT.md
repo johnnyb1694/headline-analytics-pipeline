@@ -19,6 +19,34 @@ There _is_ a 'little t' transformation as well (cf. `transform.py`) which applie
 transformations to the extracted publications archive (such as reformatting dates) but, the bulk
 of the work executed by this application is the 'EL' part of 'EtLT'!
 
+## `data_transformer`
+
+The `data_transformer` container is responsible for transforming the data that has been staged
+by the `data_loader` container via the transformation framework [dbt (core)](https://www.getdbt.com/).
+
+The entire lineage is as follows,
+
+<div align="center">
+  <img src="diagrams/dbt-lineage.png" alt="Diagram showing data lineage" width="100%" />
+  <p><em>Figure: data lineage of `data_transformer`</em></p>
+</div>
+
+To explain, step by step (left to right), what is happening here:
+
+* `src_nyt.nytas`: the raw source data that has been loaded by the `data_loader` module is stored in the entity `src_nyt.nytas`
+* `stg_nyt`: some very minor cleansing exercises are then applied to this entity which leads to the 'staging' table `stg_nyt`
+* `int_nyt_unnested`: we then ingest this staging data and 'unnest' all of the headlines so that each row represents a headline *term* (this is the structure of `int_nyt_unnested`)
+* `int_nyt_cleansed`: we then proceed with some 'cleansing' transformations - to create `int_nyt_cleansed` - as some of the headline terms are not conducive to text mining (e.g. numeric-valued entires like '$100' or empty strings '')
+* `fct_daily_term_counts`: finally, the unnested, cleansed terms are combined with a 'seed' file of stop words and aggregated (in frequency terms) into a miniature warehouse of headline term counts by date (this is )
+* `fct_logit_inputs`: the ultimate goal of the transformation pipeline is to create some inputs which can be consumed by a logistic regression model to figure out which terms are 'trending' and which terms are 'shrinking'
+
+The final 'logit' fact table (which, broadly, details the relative frequency of each specific term / topic by publication date) looks a little bit like this,
+
+<div align="center">
+  <img src="diagrams/dbt-fct-logit-inputs.png" alt="Diagram showing structure of logistic regression inputs" width="80%" />
+  <p><em>Figure: shows an example of a term 'trump' and how the relative frequency (`p_estimate`) is changing over time</em></p>
+</div>
+
 ## TODO
 
 Some items that may require attention at some point:

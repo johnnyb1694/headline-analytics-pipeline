@@ -1,0 +1,1 @@
+{{ aggregate_frequency('publication_date') }}

@@ -10,7 +10,7 @@ remove_missing_values as (
         headline_id,
         headline_term
     from int_nyt_unnested
-    where headline_term != ' '
+    where headline_term != ''
     or headline_term is not null
 
 ),

@@ -1,0 +1,1 @@
+{{ aggregate_frequency('headline_term') }}

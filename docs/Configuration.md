@@ -103,6 +103,13 @@ You can test all of this by running the Linux command,
 
 `curl http://localhost:8888`
 
+## dbt
+
+To configure the `data_transformer` project, one needs to make sure that the following command are run in order,
+
+1. `dbt seed`: this will replicate any seeded CSV files (e.g. `stop_words.csv`) into tables in the Postgres database
+2. `dbt run`: this will attempt to run all of the `dbt` models and populate the data warehouse schema `dwh`
+
 ## Digital Ocean
 
 The entire application will be deployed to a single server on Digital Ocean. At a larger scale, you
