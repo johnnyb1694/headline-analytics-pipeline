@@ -1,11 +1,11 @@
 """Responsible for ingesting data from publication outlets into the Postgres `db` service.
 """
-from .extract import (
+from extract import (
     nytas_extract_archive,
     nytas_filter_archive,
     stage
 )
-from .load import (
+from load import (
     open_connection,
     nytas_load,
     DBC

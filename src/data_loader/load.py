@@ -58,13 +58,13 @@ def nytas_load(
     try:
         with conn.cursor() as cursor, open(source_path, "r") as staged_csv:
             bulk_insert = """
-                            COPY raw.nytas (
+                            copy raw.nytas (
                                 headline, 
                                 publication_date, 
                                 author,
                                 news_desk,
                                 url
-                            ) FROM STDIN WITH (FORMAT csv, DELIMITER '|', HEADER true);
+                            ) from stdin with (format csv, delimiter '|', header true);
                           """
             cursor.copy_expert(bulk_insert, staged_csv)
     except psycopg2.errors.DatabaseError as err:
