@@ -10,4 +10,9 @@ Luckily, outlets like the New York Times ("NYT") kindly provide an [API service]
 
 To keep things simple, the scope of this project is limited to NYT (for now).
 
+## Architecture
+
+![Pipeline]("diagrams/model-architecture.drawio.svg")
+
+
 
