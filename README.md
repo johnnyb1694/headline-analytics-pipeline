@@ -13,7 +13,7 @@ Luckily, outlets like the New York Times ("NYT") kindly provide an [API service]
 
 To keep things simple, the scope of this project is limited to NYT (for now). 
 
-That said, this software has been designed to be flexible enough to flexibly accomodate other sources of data in the future.
+That said, this software has been designed to be flexible enough to accomodate other sources of data in the future.
 
 ## Architecture
 
