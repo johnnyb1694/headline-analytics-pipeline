@@ -14,7 +14,7 @@ As such, it stands to reason that the following questions should be answered by 
 * Conversely, in a similar respect, which topics were 'shrinking' in popularity?
 * Which topic(s) is (are) most popular within a given timeframe?
 
-## Data Pipeline (ELT)
+## Data Pipeline (EtLT)
 
 To support the analysis of NYT reporting trends, we will first need to build an ELT pipeline that is 
 capable of ingesting, loading and transforming data on the underlying headline data that forms part 
@@ -37,7 +37,13 @@ The basic process is as follows:
 * __Transform__: `dbt` creates a transformation pipeline which manipulates the data stored in the 
 staging area and prepares it for analysis 
 
-## Why Postgres?
+## Docker
+
+Docker will be used to 'isolate' each process.
+
+The Postgres database (container alias: `db`) will be persisted using volumes and, at the appropriate time, backed up on a schedule to the appropriate bucket.
+
+## Postgres
 
 The decision to opt for Postgres (despite its status as an OLTP system) is one of pragmatism: we 
 could, in theory, spin up a true OLAP system in the cloud but at the scale we are operating Postgres 
@@ -47,6 +53,16 @@ Debate has been had over whether to use an in-process solution like DuckDB but s
 to eventually expose analytical output stored in the database to other services 
 (e.g. some kind of presentation layer), it is easier - and makes more sense - to centralise the 
 database in another container and expose that process to other services. 
+
+## Airflow
+
+To orchestrate 'events' in the pipeline (e.g. extracting data from the New York Times API), we will use Apache Airflow.
+
+## dbt
+
+The framework `dbt` - which is *tehnically* just a Python package - will allow us to write clear transformation logic (with a coherent data lineage) that will make our analytical products much more efficient by reducing lead times on queries.
+
+Usage of `dbt` is expounded upon in the associated documentation `EtLT.md`.
 
 
 
