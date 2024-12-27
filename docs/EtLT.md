@@ -8,6 +8,26 @@ This document outlines the structure of the EtLT infrastructure, namely:
 * `src/data_transformer`: responsible for 'big T' transformations post upload via `dbt`
 * `src/db`: responsible for initialising the database infrastructure (once at the start)
 
+## Data Pipeline (EtLT)
+
+To support the analysis of NYT reporting trends, we will first need to build an ELT pipeline that is 
+capable of ingesting, loading and transforming data on the underlying headline data that forms part 
+of the Archive Search API response.
+
+<div align="center">
+  <img src="diagrams/elt-architecture.drawio.png" alt="Diagram showing the architecture of the ELT pipeline" width="60%" />
+  <p><em>Figure: architecture of the ELT pipeline</em></p>
+</div>
+
+
+The basic process is as follows:
+
+* __Extract__: data is extracted from the relevant API as JSON, flattened and then dumped in a local 
+'staging' area (a local folder)
+* __Load__: the CSV file(s) is (are) loaded into the Postgres database
+* __Transform__: `dbt` creates a transformation pipeline which manipulates the data stored in the 
+staging area and prepares it for analysis 
+
 ## `data_loader`
 
 The `data_loader` container is simply responsible for:

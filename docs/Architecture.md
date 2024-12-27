@@ -14,29 +14,6 @@ As such, it stands to reason that the following questions should be answered by 
 * Conversely, in a similar respect, which topics were 'shrinking' in popularity?
 * Which topic(s) is (are) most popular within a given timeframe?
 
-## Data Pipeline (EtLT)
-
-To support the analysis of NYT reporting trends, we will first need to build an ELT pipeline that is 
-capable of ingesting, loading and transforming data on the underlying headline data that forms part 
-of the Archive Search API response.
-
-One approach might be as follows (note: each box represents a different sandboxed, 
-containerised environment):
-
-<div align="center">
-  <img src="diagrams/architecture.drawio.png" alt="Diagram showing the architecture of the ELT pipeline" width="60%" />
-  <p><em>Figure: architecture of the ELT pipeline</em></p>
-</div>
-
-
-The basic process is as follows:
-
-* __Extract__: data is extracted from the relevant API as JSON, flattened and then dumped in a local 
-'staging' area (a local folder)
-* __Load__: the CSV file(s) is (are) loaded into the Postgres database
-* __Transform__: `dbt` creates a transformation pipeline which manipulates the data stored in the 
-staging area and prepares it for analysis 
-
 ## Docker
 
 Docker will be used to 'isolate' each process.
