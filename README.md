@@ -13,5 +13,5 @@ To keep things simple, the scope of this project is limited to NYT (for now).
 ## Architecture
 
 <div style="text-align: center;"> 
-  <img src="https://github.com/user-attachments/assets/56de2a27-7019-42f8-8070-6e9454a99b02" alt="Diagram">
+  <img src="https://github.com/user-attachments/assets/db6f7e0c-899b-43b3-8a9e-97f0ee2f45be" alt="Diagram">
 </div>
