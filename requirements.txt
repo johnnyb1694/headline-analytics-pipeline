@@ -25,11 +25,13 @@ MarkupSafe==3.0.2
 mashumaro==3.14
 more-itertools==10.5.0
 msgpack==1.1.0
+mypy-extensions==1.0.0
 networkx==3.4.2
 numpy==2.2.1
 ordered-set==4.1.0
 packaging==24.2
 pandas==2.2.3
+pandera==0.22.1
 parsedatetime==2.6
 pathspec==0.12.1
 patsy==1.0.1
@@ -53,7 +55,9 @@ snowplow-tracker==1.0.4
 sqlparse==0.5.3
 statsmodels==0.14.4
 text-unidecode==1.3
+typeguard==4.4.1
 types-requests==2.32.0.20241016
+typing-inspect==0.9.0
 typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.2.3

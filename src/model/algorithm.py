@@ -1,9 +1,16 @@
 import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
-from db_utils import DBC, open_connection, get_logit_inputs
+import src.model.schema as schema
+import logging
+from pandera import check_input, check_output
+from src.model.db_utils import DBC, open_connection, get_logit_inputs
 
 
+logger = logging.getLogger(__name__)
+
+
+@check_input(schema.TERM_DF)
 def compute_term_trend(
     term_df: pd.DataFrame
 ) -> dict[str, float]:
@@ -35,6 +42,8 @@ def compute_term_trend(
     }
     
 
+@check_input(schema.LOGIT_INPUTS)
+@check_output(schema.LOGIT_OUTPUTS)
 def compute_batch_trend(
     logit_inputs: pd.DataFrame
 ) -> pd.DataFrame:
@@ -54,27 +63,11 @@ def compute_batch_trend(
         try:
             trend_factors[term] = compute_term_trend(term_df)
         except RuntimeWarning:
-            print(f"Erroneous fitting detected for term '{term}'; negating output.")
+            logger.warning(f"Erroneous fitting detected for term '{term}'; negating output.")
             trend_factors[term] = None
-    return pd.DataFrame.from_dict(trend_factors, orient="index")
+    logit_outputs = pd.DataFrame.from_dict(trend_factors, orient="index").reset_index(names="headline_term")
+    return logit_outputs
 
 
 if __name__ == '__main__':
-
-    from datetime import date
-
-    dbc = DBC(
-        dbname='publications',
-        user='postgres',
-        password='XXX'
-    )
-    conn = open_connection(
-        dbc
-    )
-    logit_inputs = get_logit_inputs(
-        conn, 
-        min_publication_date=date(2024, 6, 1),
-        max_publication_date=date(2024, 12, 1)
-    )
-    trend_factors = compute_batch_trend(logit_inputs)
-    print(trend_factors)
+    pass
