@@ -12,7 +12,6 @@ To keep things simple, the scope of this project is limited to NYT (for now).
 
 ## Architecture
 
-![Pipeline]("diagrams/model-architecture.drawio.svg")
-
-
-
+<div style="text-align: center;"> 
+  <img src="https://github.com/user-attachments/assets/56de2a27-7019-42f8-8070-6e9454a99b02" alt="Diagram">
+</div>
