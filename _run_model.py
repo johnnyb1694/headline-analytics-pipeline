@@ -6,7 +6,6 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 from pathlib import Path
-from psycopg2 import sql
 from src.model import (
     open_connection,
     DBC,
@@ -48,7 +47,7 @@ def run_model(
         conn.autocommit = False
         with conn.cursor() as cursor:
             
-            logging.info(f"Checking for pre-existing output for time horizon: '{str(min_publication_date)}' - '{str(max_publication_date)}'")
+            logging.info(f"Checking for pre-existing output as at: '{str(min_publication_date)}' - '{str(max_publication_date)}'")
             cursor.execute(
                 """
                     SELECT 
@@ -62,7 +61,7 @@ def run_model(
             awaiting_run = (cursor.fetchone()[0] == 0)
 
             if awaiting_run:
-                logging.info(f"Commencing model run for time horizon: '{str(min_publication_date)}' - '{str(max_publication_date)}'")
+                logging.info(f"Commencing model fit for time horizon: '{str(min_publication_date)}' - '{str(max_publication_date)}'")
                 cursor.execute(
                     """
                         INSERT INTO model.run (

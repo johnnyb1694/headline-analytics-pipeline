@@ -15,8 +15,11 @@ To keep things simple, the scope of this project is limited to NYT (for now).
 
 That said, this software has been designed to be flexible enough to accomodate other sources of data in the future.
 
-## Architecture
+## Architecture 
 
-<div style="text-align: center;"> 
-  <img src="docs/diagrams/model-architecture-readme.drawio.png" alt="Diagram">
+<div align="center"> 
+  <img src="docs/diagrams/model-architecture-readme.drawio.png" alt="Diagram showing architecture of modelling software" width="60%">
+    <p><em>Figure: architecture of the EtLT pipeline and associated views ('Interface')</em></p>
 </div>
+
+

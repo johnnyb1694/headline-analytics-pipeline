@@ -31,10 +31,6 @@ to eventually expose analytical output stored in the database to other services
 (e.g. some kind of presentation layer), it is easier - and makes more sense - to centralise the 
 database in another container and expose that process to other services. 
 
-## Airflow
-
-To orchestrate 'events' in the pipeline (e.g. extracting data from the New York Times API), we will use Apache Airflow.
-
 ## dbt
 
 The framework `dbt` - which is *tehnically* just a Python package - will allow us to write clear transformation logic (with a coherent data lineage) that will make our analytical products much more efficient by reducing lead times on queries.
