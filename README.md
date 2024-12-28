@@ -18,7 +18,7 @@ That said, this software has been designed to be flexible enough to accomodate o
 ## Architecture 
 
 <div align="center"> 
-  <img src="docs/diagrams/model-architecture-readme.drawio.png" alt="Diagram showing architecture of modelling software" width="60%">
+  <img src="docs/diagrams/model-architecture-readme.drawio.png" alt="Diagram showing architecture of modelling software" style="border-radius: 15px;" width="90%" >
     <p><em>Figure: architecture of the EtLT pipeline and associated views ('Interface')</em></p>
 </div>
 
