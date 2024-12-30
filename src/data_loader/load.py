@@ -1,75 +1,63 @@
 """Loads data from a CSV file into a remote Postgres database instance efficiently with `COPY`
 """
 import psycopg2
-import logging
 import os
-from pydantic import BaseModel
 from pathlib import Path
-
+from psycopg2 import sql
+import logging
 
 logger = logging.getLogger(__name__)
 
 
-class DBC(BaseModel):
-    """ Database Configuration ('DBC')
+def construct_copy_statement(
+    schema: str,
+    table: str,
+    columns: list
+) -> sql.SQL:
+    """Constructs the copy statement for efficient loading of CSV into Postgres using
+    safe query interpolation.
     """
-    dbname: str
-    user: str
-    password: str
-    host: str = "localhost"
-    port: int = 5432
-
-    def __str__(self):
-        return f"Postgres (db: '{self.dbname}', host: '{self.host}', port: '{self.port}')"
-
-
-def open_connection(
-    dbc: DBC
-):
-    """Open connection to Postgres database.
-
-    :param dbname: name of database (see `container_name` property)
-    :param user: username of service account (typically 'postgres')
-    :param password: password of service account (see `POSTGRES_PASSWORD_FILE` property)
-    :param host: address of database instance, defaults to "localhost"
-    :param port: port on which the database listens for incoming connections, defaults to 5432
-    :return: a connection object
-    """
-    conn_params = { 
-        "dbname": dbc.dbname, 
-        "user": dbc.user, 
-        "password": dbc.password, 
-        "host": dbc.host, 
-        "port": str(dbc.port)
-    }
-    return psycopg2.connect(**conn_params)
+    # Construct the columns part of the SQL query safely
+    columns_sql = sql.SQL(', ').join(map(sql.Identifier, columns))
+    bulk_insert = sql.SQL("""
+                    COPY {}.{} ({})
+                    FROM STDIN WITH (FORMAT csv, DELIMITER '|', HEADER true);
+                    """).format(
+        sql.Identifier(schema),
+        sql.Identifier(table),
+        columns_sql
+    )
+    return bulk_insert
 
 
-def nytas_load(
+def ingest(
     conn,
+    schema: str,
+    table: str,
+    columns: list,
     source_path: Path
 ) -> None:
-    """Loads data extracted from the New York Times Archive into Postgres.
+    """Loads data extracted in a CSV format into Postgres.
 
     :param conn: connection inherited from `psycopg2`
+    :param schema: schema of the target table
+    :param table: name of the target table
     :param source_path: path to CSV file for upload
+    :param columns: list of columns to be included in the COPY command
     :return: null
     """
     try:
         with conn.cursor() as cursor, open(source_path, "r") as staged_csv:
-            bulk_insert = """
-                            copy raw.nytas (
-                                headline, 
-                                publication_date, 
-                                author,
-                                news_desk,
-                                url
-                            ) from stdin with (format csv, delimiter '|', header true);
-                          """
+            bulk_insert = construct_copy_statement(
+                schema,
+                table,
+                columns
+            )
             cursor.copy_expert(bulk_insert, staged_csv)
     except psycopg2.errors.DatabaseError as err:
-        logger.error(f"Failed to upload staged NYTAS files to Postgres: '{err}'")
+        logger.error(f"Failed to upload staged file to Postgres: '{err}'")
     else:  
+        conn.commit()
         os.remove(source_path)
 
 

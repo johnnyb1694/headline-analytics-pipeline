@@ -7,7 +7,7 @@ import requests
 import logging
 import csv
 from pathlib import Path
-from transform import (
+from .transform import (
     nytas_transform_author,
     nytas_transform_date
 )
