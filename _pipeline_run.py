@@ -7,6 +7,7 @@ You can alternatively run the same logic presented here from the command line li
 prefect deployment run --params '{"year": 2024, "month": 10}' 'main-nytas/newton-nytas-pipeline'
 ````
 """
+import prefect.main # must be imported due to known issue: https://github.com/PrefectHQ/prefect/issues/15957
 from prefect.deployments import run_deployment
 
 
@@ -14,8 +15,8 @@ def run_pipeline() -> None:
     run_deployment(
         name="main-nytas/newton-nytas-pipeline",
         parameters={
-            "year": "2024",
-            "month": "9"
+            "year": 2024,
+            "month": 9
         }
     )
 
