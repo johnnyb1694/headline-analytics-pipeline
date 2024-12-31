@@ -18,7 +18,7 @@ prefect server start
 2. Create a work pool for the Docker image
 
 ````
-prefect work-pool create --type docker --base-job-template base-job-template.json local-pool
+prefect work-pool create --type docker --base-job-template config/base-job-template.json local-pool
 ````
 
 3. Start a 'worker' to poll the aforementioned pool (via the Prefect API) for jobs
@@ -60,26 +60,28 @@ Parameters:
 
 Tasks:
 
-newton-elt-flow (Flow)
+> newton-elt-flow (Flow)
 --> Open connection to Postgres database (context-managed) (Task)
 --> Extract data 'as at' the given year and month (Task)
-- Task 3: Load extracted data into staging area of Postgres database
-- Task 4: Transform loaded data via `dbt` framework
-- Task 5: If applicable, download logit inputs
-- Task 6: If applicable, administer logistic growth model fit
-- Task 6: If applicable, upload logistic growth fit to Postgres database
+--> Load extracted data into staging area of Postgres database
+--> Transform loaded data via `dbt` framework
+--> If applicable (i.e. there is 'enough' data):
+----> Download logit inputs
+----> Administer logistic growth model fit
+----> Upload logistic growth fit to Postgres database
 
 """
 import os
 import datetime
-import subprocess
+import dbt
 from prefect import flow
 from prefect.logging import get_run_logger
 from dotenv import load_dotenv
 from _pipeline_tasks import (
     establish_dwh_connection, 
     stage_nytas_archive_to_csv,
-    ingest_nytas_archive
+    ingest_nytas_archive,
+    trigger_dbt_flow
 )
 load_dotenv()
 
@@ -89,7 +91,7 @@ FIRST = TODAY.replace(day=1)
 LATEST_PERIOD = FIRST - datetime.timedelta(days=1)
 
 
-@flow
+@flow(log_prints=True)
 def main_nytas(
     year: int = LATEST_PERIOD.year,
     month: int = LATEST_PERIOD.month
@@ -103,7 +105,8 @@ def main_nytas(
     conn = establish_dwh_connection(
         dbname=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PWD")
+        password=os.getenv("DB_PWD"),
+        host="publications-db"
     )
     logger.info(f"Successfully established connection to: '{str(conn)}'")
 
@@ -121,7 +124,8 @@ def main_nytas(
         source_path=staging_path
     )
 
-    logger.info(f"Current working directory structure: {subprocess.run(["ls", "-l"])}")
+    logger.info(f"Running `dbt` transformation models")
+    trigger_dbt_flow()
 
 
 if __name__ == "__main__":

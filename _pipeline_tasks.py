@@ -2,16 +2,20 @@
 
 Tasks:
 
-- Task 1: Open connection to Postgres database (context-managed) (Y)
-- Task 2: Extract data 'as at' the given year and month
-- Task 3: Load extracted data into staging area of Postgres database
-- Task 4: Transform loaded data via `dbt` framework
-- Task 5: If applicable, download logit inputs
-- Task 6: If applicable, administer logistic growth model fit
-- Task 6: If applicable, upload logistic growth fit to Postgres database
+> newton-elt-flow (Flow)
+--> Open connection to Postgres database (context-managed) (Task)
+--> Extract data 'as at' the given year and month (Task)
+--> Load extracted data into staging area of Postgres database
+--> Transform loaded data via `dbt` framework
+--> If applicable (i.e. there is 'enough' data):
+----> Download logit inputs
+----> Administer logistic growth model fit
+----> Upload logistic growth fit to Postgres database
 
 """
 from prefect import task
+from prefect_dbt.cli.commands import DbtCoreOperation
+from pathlib import Path
 from src.db.utils import open_connection
 from src.data_loader import (
     nytas_extract_archive, 
@@ -19,6 +23,11 @@ from src.data_loader import (
     stage,
     ingest
 )
+
+
+PROJECT_DIR = Path(__file__).parent
+PATH_DBT_PROFILES = PROJECT_DIR / "config"
+PATH_DBT_PROJECT = PROJECT_DIR / "src" / "data_transformer"
 
 
 @task(name="establish_dwh_connection", retries=3, retry_delay_seconds=5)
@@ -78,7 +87,18 @@ def ingest_nytas_archive(
         columns=["headline", "publication_date", "author", "news_desk", "url"],
         source_path=source_path
     )
-    
+
+
+@task
+def trigger_dbt_flow() -> str:
+    """Run all dbt models in succession
+    """
+    return DbtCoreOperation(
+        commands=["dbt seed", "dbt run"],
+        project_dir=PATH_DBT_PROJECT,
+        profiles_dir=PATH_DBT_PROFILES
+    ).run()
+
 
 if __name__ == "__main__":
     pass

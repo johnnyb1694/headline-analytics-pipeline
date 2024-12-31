@@ -2,3 +2,6 @@ requests
 psycopg2-binary
 pydantic
 python-dotenv
+dbt-core
+dbt-postgres
+prefect[dbt]
