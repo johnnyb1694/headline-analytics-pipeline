@@ -1,4 +1,4 @@
-# Headlines Data Pipeline ('Newton') 📰 
+# Headline Analytics (ELT) Pipeline 📰 
 
 > **Project Status:** In Progress
 
