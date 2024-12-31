@@ -130,9 +130,9 @@ def main_nytas(
 
 if __name__ == "__main__":
     main_nytas.deploy(
-        name="newton-nytas-pipeline",
+        name="headline-analytics-pipeline",
         work_pool_name="local-pool",
-        image="dededex/newton-pipeline:v0.0.0.9000",
+        image="dededex/headline-analytics-pipeline:v0.0.0.9000",
         job_variables={
             "DOCKER_HOST": "unix:///Users/Johnny/.docker/run/docker.sock"
         }

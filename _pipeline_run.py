@@ -22,7 +22,7 @@ def run_pipeline(
     month: int = LATEST_PERIOD.month
 ) -> None:
     run_deployment(
-        name="main-nytas/newton-nytas-pipeline",
+        name="main-nytas/headline-analytics-pipeline",
         parameters={
             "year": year,
             "month": month
