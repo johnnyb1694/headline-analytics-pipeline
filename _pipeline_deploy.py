@@ -18,13 +18,13 @@ prefect server start
 2. Create a work pool for the Docker image
 
 ````
-prefect work-pool create --type docker --base-job-template config/base-job-template.json local-pool
+prefect work-pool create --type docker --base-job-template config/base-job-template.json docker-pool
 ````
 
 3. Start a 'worker' to poll the aforementioned pool (via the Prefect API) for jobs
 
 ````
-prefect worker start --pool local-pool
+prefect worker start --pool docker-pool
 ````
 
 ---- Notes ----
@@ -131,9 +131,10 @@ def main_nytas(
 if __name__ == "__main__":
     main_nytas.deploy(
         name="headline-analytics-pipeline",
-        work_pool_name="local-pool",
+        work_pool_name="docker-pool",
         image="dededex/headline-analytics-pipeline:v0.0.0.9000",
         job_variables={
             "DOCKER_HOST": "unix:///Users/Johnny/.docker/run/docker.sock"
-        }
+        },
+        push=False
     )

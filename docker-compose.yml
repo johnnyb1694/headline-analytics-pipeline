@@ -10,6 +10,8 @@ services:
     volumes:
       - publications-db-data:/var/lib/postgresql/data
       - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend
     environment:
       - POSTGRES_DB=publications
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
@@ -34,9 +36,15 @@ services:
       - 8888:80
     volumes:
       - publications-db-admin-data:/var/lib/pgadmin
+    networks:
+      - backend
     depends_on:
       db:
         condition: service_healthy
+
+networks:
+  backend:
+    name: headline-analytics-backend
 
 volumes:
   publications-db-data:
