@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="25.0.3">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.1">
   <diagram name="Page-1" id="kr2xOPOI3GjvuV5hb4eG">
-    <mxGraphModel dx="2954" dy="1145" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1222" dy="1053" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -93,11 +93,14 @@
         <mxCell id="Nmos6C9Gwye4AmpU9b0R-31" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png;" parent="1" vertex="1">
           <mxGeometry x="606" y="297.06" width="30" height="32.94" as="geometry" />
         </mxCell>
-        <mxCell id="ByU9qiZ3OBVU3urzjESb-1" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://miro.medium.com/v2/resize:fit:700/1*Mq0CqXzlHOJVysq1v_a5dA.png;" vertex="1" parent="1">
+        <mxCell id="ByU9qiZ3OBVU3urzjESb-1" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://miro.medium.com/v2/resize:fit:700/1*Mq0CqXzlHOJVysq1v_a5dA.png;" parent="1" vertex="1">
           <mxGeometry x="179" y="480.00000000000006" width="160" height="54.17" as="geometry" />
         </mxCell>
-        <mxCell id="ByU9qiZ3OBVU3urzjESb-2" value="Orchestrator" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=none;imageAspect=0;aspect=fixed;image=https://cdn0.iconfinder.com/data/icons/business-startup-10/50/35-128.png;fontFamily=Verdana;" vertex="1" parent="1">
+        <mxCell id="ByU9qiZ3OBVU3urzjESb-2" value="Orchestrator" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=none;imageAspect=0;aspect=fixed;image=https://cdn0.iconfinder.com/data/icons/business-startup-10/50/35-128.png;fontFamily=Verdana;" parent="1" vertex="1">
           <mxGeometry x="230" y="518" width="58" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="Kt0RtbIqWp9vyj6e19SR-1" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Docker.svg;" vertex="1" parent="1">
+          <mxGeometry x="225" y="150" width="50" height="41" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
