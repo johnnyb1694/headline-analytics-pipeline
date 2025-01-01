@@ -53,12 +53,4 @@ def read_sql(
 
 
 if __name__ == "__main__":
-
-    with open_connection(
-        dbname="publications",
-        user="postgres",
-        password="avnY6iKeAM%L6KUgU$fESCV&jW",
-        host="localhost"
-    ) as conn:
-        df = read_sql(conn, "SELECT * FROM dwh.fct_logit_inputs LIMIT 10")
-        print(df)
+    pass

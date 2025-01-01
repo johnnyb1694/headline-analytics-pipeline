@@ -4,7 +4,6 @@ import statsmodels.formula.api as smf
 import src.model.schema as schema
 import logging
 from pandera import check_input, check_output
-from src.model.db_utils import DBC, open_connection, get_logit_inputs
 
 
 logger = logging.getLogger(__name__)
