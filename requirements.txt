@@ -5,3 +5,6 @@ python-dotenv
 dbt-core
 dbt-postgres
 prefect[dbt]
+pandas
+statsmodels
+pandera

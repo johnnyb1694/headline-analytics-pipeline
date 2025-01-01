@@ -19,10 +19,11 @@ def construct_copy_statement(
     """
     # Construct the columns part of the SQL query safely
     columns_sql = sql.SQL(', ').join(map(sql.Identifier, columns))
-    bulk_insert = sql.SQL("""
-                    COPY {}.{} ({})
-                    FROM STDIN WITH (FORMAT csv, DELIMITER '|', HEADER true);
-                    """).format(
+    bulk_insert = sql.SQL(
+        """
+            COPY {}.{} ({})
+            FROM STDIN WITH (FORMAT csv, DELIMITER '|', HEADER true);
+        """).format(
         sql.Identifier(schema),
         sql.Identifier(table),
         columns_sql
@@ -39,7 +40,7 @@ def ingest(
 ) -> None:
     """Loads data extracted in a CSV format into Postgres.
 
-    :param conn: connection inherited from `psycopg2`
+    :param conn: connection object (inherited from `psycopg2`)
     :param schema: schema of the target table
     :param table: name of the target table
     :param source_path: path to CSV file for upload

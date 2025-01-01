@@ -1,17 +1,4 @@
-"""Prefect tasks which form part of the overall pipeline `flow`.
-
-Tasks:
-
-> newton-elt-flow (Flow)
---> Open connection to Postgres database (context-managed) (Task)
---> Extract data 'as at' the given year and month (Task)
---> Load extracted data into staging area of Postgres database
---> Transform loaded data via `dbt` framework
---> If applicable (i.e. there is 'enough' data):
-----> Download logit inputs
-----> Administer logistic growth model fit
-----> Upload logistic growth fit to Postgres database
-
+"""Prefect tasks which form part of the pipeline `flow` object.
 """
 from prefect import task
 from prefect_dbt.cli.commands import DbtCoreOperation

@@ -54,7 +54,7 @@ Flows:
 These flows are sufficiently independent; technically, there is no requirement for the logistic growth
 model to be fit as part of the ELT process (and vice versa).
 
-This script concerns the first flow (ELT).
+This script concerns the second flow (logit).
 
 Environment Variables:
 
@@ -68,49 +68,54 @@ Parameters:
 - Month
 - Model (Y/N)
 
-Flow (ELT)
+Flow (Logit Growth Model)
 ----
-cron: (0 0 1 * *) -> first day of each month at midnight
+cron: (0 1 1 * *) -> first day of each month at 1 hour past midnight
 ----
-|--> Open connection to Postgres database (context-managed) (Task)
-|--> Extract data 'as at' the given year and month (Task)
-|--> Load extracted data into staging area of Postgres database
-|--> Transform loaded data via `dbt` framework
+|--> Download logit inputs for the given as at date and time horizon
+|--> Administer logistic growth model fit
+|--> Upload logistic growth fit to Postgres database
 
 """
 import os
 import datetime
+from dateutil.relativedelta import relativedelta
 from prefect import flow
 from prefect.logging import get_run_logger
 from dotenv import load_dotenv
-from _pipeline_tasks import (
-    establish_dwh_connection, 
-    stage_nytas_archive_to_csv,
-    ingest_nytas_archive,
-    trigger_dbt_flow
+from pathlib import Path
+from _logit_tasks import (
+    establish_dwh_connection,
+    get_model_run_id,
+    assign_model_run_id,
+    get_logit_inputs,
+    fit_logit_batch,
+    ingest_logit_outputs
 )
 load_dotenv()
 
 
 TODAY = datetime.date.today()
 FIRST = TODAY.replace(day=1)
-LATEST_PERIOD = FIRST - datetime.timedelta(days=1)
 
 
 @flow(log_prints=True)
-def main_nytas(
-    year: int = LATEST_PERIOD.year,
-    month: int = LATEST_PERIOD.month
+def main_logit_growth(
+    as_at: str = str(FIRST),
+    time_horizon_months: int = 6
 ):
-    """Extracts, loads and transforms a given NYT Archive Search ('nytas') metadata archive
-    for the given as at date (as prescribed by `year` and `month`)
+    """Fits a logistic growth model (and stores the results in the data warehouse) for the given
+    `as_at` and time horizon.
 
-    :param year: integer year of interest, defaults to LATEST_PERIOD.year
-    :param month: integer month of interest, defaults to LATEST_PERIOD.month
+    :param as_at: as at date, defaults to `FIRST` (i.e. the first day of the 'current' month)
+    :param time_horizon_months: length of time over which to compute the growth statistics;
+                                determines volume of data to train on, defaults to 6
     """
     # Setup
     logger = get_run_logger()
-    source_staging_path = f"{year}_{month}_nytas.csv"
+    logit_end_date = datetime.datetime.strptime(as_at, "%Y-%m-%d")
+    logit_start_date = logit_end_date - relativedelta(months=time_horizon_months)
+    staging_path = f"{str(logit_start_date)}_{str(logit_end_date)}_logit_out.csv"
 
     # Run
     try:
@@ -123,26 +128,36 @@ def main_nytas(
         ) as conn:
             logger.info(f"Successfully established connection to: '{str(conn)}'")
 
-            logger.info(f"Staging data from NYT Archive Search locally @ '{source_staging_path}'")
-            stage_nytas_archive_to_csv(
-                nytas_api_key=os.getenv("NYTAS_API_KEY"),
-                year=year,
-                month=month,
-                staging_path=source_staging_path
+            existing_model_run_id = get_model_run_id(conn, str(logit_start_date), str(logit_end_date))
+            if existing_model_run_id:
+                logger.info(f"Model already fitted (see `dwh.model.run` with id '{existing_model_run_id}')")
+                return
+            else:
+                model_run_id = assign_model_run_id(conn, str(logit_start_date), str(logit_end_date))
+
+            logger.info(f"Downloading latest logit inputs as at: '{str(as_at)}' (time horizon: 6 months)")
+            logit_inputs = get_logit_inputs(
+                conn,
+                start_date=str(logit_start_date),
+                end_date=str(logit_end_date)
             )
 
-            logger.info(f"Ingesting data @ '{source_staging_path}' into Postgres database @ '{str(conn)}'")
-            ingest_nytas_archive(
-                conn=conn,
-                source_path=source_staging_path
+            logger.info(f"Fitting logistic growth model to every headline term / topic")
+            logit_outputs = fit_logit_batch(logit_inputs)
+            logit_outputs["model_run_id"] = model_run_id
+
+            logger.info(f"Dumping model results into CSV format @ '{staging_path}'")
+            logit_outputs.to_csv(staging_path, sep="|", index=False)
+
+            logger.info(f"Ingesting results into Postgres instance @ '{str(conn)}'")
+            ingest_logit_outputs(
+                conn,
+                staging_path
             )
-
-            logger.info(f"Running `dbt` transformation models")
-            trigger_dbt_flow()
-
+            
     except Exception as e:
         conn.rollback()
-        logger.error(f"ELT pipeline encountered a fatal error: '{str(e)}'")
+        logger.error(f"Logistic fitting exercise encountered a fatal error: '{str(e)}'")
     else:
         conn.commit()
     finally:
@@ -150,14 +165,14 @@ def main_nytas(
 
 
 if __name__ == "__main__":
-    
-    main_nytas.deploy(
-        name="headline-analytics-pipeline",
+
+    main_logit_growth.deploy(
+        name="headline-analytics-logit-model",
         work_pool_name="docker-pool",
-        image="dededex/headline-analytics-pipeline:v0.0.0.9000",
+        image="dededex/headline-analytics-logit-model:v0.0.0.9000",
         job_variables={
             "DOCKER_HOST": "unix:///Users/Johnny/.docker/run/docker.sock"
         },
         push=False,
-        cron="0 0 1 * *"
+        cron="0 1 1 * *"
     )

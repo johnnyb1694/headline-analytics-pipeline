@@ -15,24 +15,24 @@ from prefect.deployments import run_deployment
 
 TODAY = datetime.date.today()
 FIRST = TODAY.replace(day=1)
-LATEST_PERIOD = FIRST - datetime.timedelta(days=1)
+
 
 @click.command
-@click.option("-y", "--year", type=int, help="Year of interest")
-@click.option("-m", "--month", type=int, help="Month of interest (1-12)")
-def run_pipeline(
-    year: int = LATEST_PERIOD.year,
-    month: int = LATEST_PERIOD.month
+@click.option("-a", "--as-at", type=int, help="As at date (in fomat 'Yyyy-mm-dd')")
+@click.option("-t", "--time-horizon-months", type=int, help="# of training months in advance of 'as at'")
+def run_logit_growth_fitting(
+    as_at: datetime.date | str = FIRST,
+    time_horizon_months: int = 6
 ) -> None:
     run_deployment(
-        name="main-nytas/headline-analytics-pipeline",
+        name="main-logit-growth/headline-analytics-logit-model",
         parameters={
-            "year": year,
-            "month": month
+            "as_at": as_at,
+            "time_horizon_months": time_horizon_months
         }
     )
 
 
 if __name__ == "__main__":
-    run_pipeline()
+    run_logit_growth_fitting()
 
