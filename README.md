@@ -13,7 +13,7 @@ You can understand topic trends by fitting a [logistic growth model](https://sit
 coefficient (calculated across each topic) informs us the degree to which each topic is trending
 or shrinking in popularity.
 
-For example, here are the top 10 trending topics for the period 1st July 2024 to 1st January 2025
+For example, here are the top 10 trending topics in the New York Times for the period 1st July 2024 to 1st January 2025
 as determined by the logistic growth model that is embedded inside this analytics pipeline,
 
 <div align="center"> 
