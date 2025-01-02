@@ -68,7 +68,7 @@ growth_theme <- construct_viz_theme()
 
 top_trending_df |>
   ggplot(mapping = aes(publication_date, relative_frequency, colour = headline_term)) +
-  geom_line(alpha = 0.80, show.legend = FALSE, size = 1.2) +
+  geom_line(alpha = 0.80, show.legend = FALSE, linewidth = 1.2) +
   facet_wrap(~headline_term) +
   scale_y_continuous(labels = scales::percent_format()) +
   labs(x = "Time (days since new year)",
