@@ -1,20 +1,8 @@
-# Configuration
-
-## Naming
-
-In order to create names for services that were memorable, I decided that rather than name 
-everything in a generic fashion (e.g. `db`) I would tag every service with a prefix.
-
-In the end, the selected prefix was 'Newton', named after the epoynmous mathematician and scientist
-who - amongst many other things - was a highly influential figure in the realms of calculus and
-theoretical physics.
-
-Perhaps somebody else will come along soon and create another service called 'Leibniz' to rival
-my own (I very much doubt it, since this is just a pet project but you never know!)
-
-## Docker (Compose)
+# Docker (Compose)
 
 We use Docker to configure all of the services that we need to in order to run the data pipeline.
+
+## Overview
 
 The first key component of this is our Postgres instance. __Please note that I would not necessarily
 recommend using Postgres inside a container in an enterprise production setting - this is a pet 
@@ -27,22 +15,23 @@ in on the database service itself,
 services:
 
   db:
-    image: postgres # the image we want to pull from Docker Hub
-    container_name: newton-db # a convenient name for the container; alias for host name
-    restart: always # if failure occurs, the container will always be restarted
-    user: postgres # the user under which the container will 'run as'
-    secrets: 
-      - db-name # name of our database
-      - db-password # password used to login to the database
+    image: postgres
+    container_name: publications-db
+    restart: always
+    user: postgres
+    secrets:
+      - db-password
     volumes:
-      - db-data:/var/lib/postgresql/data # persists the *data* stored in the database on the host
-      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql # initialises the raw data schema (for storing raw article data)
+      - publications-db-data:/var/lib/postgresql/data
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - backend
     environment:
-      - POSTGRES_DB=/run/secrets/db-name
+      - POSTGRES_DB=publications
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-    expose:
+    ports:
       - 5432:5432
-    healthcheck: # a useful feature of Docker which defines 'when the service is ready'
+    healthcheck:
       test: [ "CMD", "pg_isready" ]
       interval: 10s
       timeout: 5s
@@ -102,16 +91,3 @@ In effect, this means that if we type `localhost:8888` into our browser, this re
 You can test all of this by running the Linux command,
 
 `curl http://localhost:8888`
-
-## dbt
-
-To configure the `data_transformer` project, one needs to make sure that the following command are run in order,
-
-1. `dbt seed`: this will replicate any seeded CSV files (e.g. `stop_words.csv`) into tables in the Postgres database
-2. `dbt run`: this will attempt to run all of the `dbt` models and populate the data warehouse schema `dwh`
-
-## Digital Ocean
-
-The entire application will be deployed to a single server on Digital Ocean. At a larger scale, you
-might decide to decompose the services (e.g. the database layer) across different servers but at 
-this tiny scale, it didn't seem necessary to me!

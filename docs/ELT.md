@@ -10,15 +10,7 @@ This document outlines the structure of the EtLT infrastructure, namely:
 
 ## Data Pipeline (EtLT)
 
-To support the analysis of NYT reporting trends, we will first need to build an ELT pipeline that is 
-capable of ingesting, loading and transforming data on the underlying headline data that forms part 
-of the Archive Search API response.
-
-<div align="center">
-  <img src="diagrams/elt-architecture.drawio.png" alt="Diagram showing the architecture of the ELT pipeline" width="60%" />
-  <p><em>Figure: architecture of the ELT pipeline</em></p>
-</div>
-
+To support the analysis of NYT reporting trends, I built an ELT pipeline.
 
 The basic process is as follows:
 
@@ -30,7 +22,7 @@ staging area and prepares it for analysis
 
 ## `data_loader`
 
-The `data_loader` container is simply responsible for:
+The `data_loader` module is responsible for:
 
 1. `extract.py`: extracting data from a certain publication outlet (e.g. the New York Times)
 2. `load.py`: flattening the resultant JSON into a CSV format and uploading to Postgres (via the `COPY` statement)
@@ -41,8 +33,8 @@ of the work executed by this application is the 'EL' part of 'EtLT'!
 
 ## `data_transformer`
 
-The `data_transformer` container is responsible for transforming the data that has been staged
-by the `data_loader` container via the transformation framework [dbt (core)](https://www.getdbt.com/).
+The `data_transformer` module is responsible for transforming the data that has been staged
+by the `data_loader` module via the transformation framework [dbt (core)](https://www.getdbt.com/).
 
 The entire lineage is as follows,
 
@@ -66,14 +58,4 @@ The final 'logit' fact table (which, broadly, details the relative frequency of 
   <img src="diagrams/dbt-fct-logit-inputs.png" alt="Diagram showing structure of logistic regression inputs" width="80%" />
   <p><em>Figure: shows an example of a term 'trump' and how the relative frequency (`p_estimate`) is changing over time</em></p>
 </div>
-
-## TODO
-
-Some items that may require attention at some point:
-
-* Many functions in the `data_loader` module are prepended with `nytas` to indicate that the functionality relates to the 
-publication API 'New York Times Archive Search'; however, perhaps a better method of organisation
-would be to place all related functions inside a module or submodule and delegate the prefix to
-Python (this is perhaps a better long term solution!)
-* Investigate slicker options of deploying changes to Postgres (perhaps `liquibase` or o/w)
 

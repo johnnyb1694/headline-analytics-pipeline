@@ -14,11 +14,23 @@ As such, it stands to reason that the following questions should be answered by 
 * Conversely, in a similar respect, which topics were 'shrinking' in popularity?
 * Which topic(s) is (are) most popular within a given timeframe?
 
+## Overview
+
+Here is an overview of the entire architecture, including some basic information on the Docker network
+that powers everything,
+
+<div align="center">
+  <img src="diagrams/model-architecture-network.drawio.png" alt="Diagram showing the architecture of the ELT pipeline" width="80%" />
+  <p><em>Figure: architecture of the ELT pipeline</em></p>
+</div>
+
 ## Docker
 
-Docker will be used to 'isolate' each process.
+Docker is used to 'isolate' each process.
 
 The Postgres database (container alias: `db`) will be persisted using volumes and, at the appropriate time, backed up on a schedule to the appropriate bucket.
+
+Usage of `docker` is expounded upon in the associated documentation `Docker.md`
 
 ## Postgres
 
@@ -35,7 +47,22 @@ database in another container and expose that process to other services.
 
 The framework `dbt` - which is *tehnically* just a Python package - will allow us to write clear transformation logic (with a coherent data lineage) that will make our analytical products much more efficient by reducing lead times on queries.
 
-Usage of `dbt` is expounded upon in the associated documentation `EtLT.md`.
+Usage of `dbt` is expounded upon in the associated documentation `ELT.md`.
+
+## Prefect
+
+The framework `Prefect` - also *technically* a Python package - allows you to orchestrate a series of dependent steps (which `Prefect` calls 'tasks') into an entire pipeline (which `Prefect` calls a 'flow').
+
+A considerable amount of effort in this project went into this orchestration piece. Please do read `Orchestration.md` for further information on this topic.
+
+## Python
+
+Python is the instrument of choice for developing the logistic growth model. I used the `statsmodels` library to do so.
+
+For more information on the methodology behind the algorithm choice, please see the documentation `Algorithm.md`.
+
+
+
 
 
 

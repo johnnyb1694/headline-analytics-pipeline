@@ -155,5 +155,5 @@ dmypy.json
 cython_debug/
 
 # Configuration
-config/
+config/*.yml
 .Rproj.user
