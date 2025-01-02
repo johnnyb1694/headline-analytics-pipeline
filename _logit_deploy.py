@@ -124,7 +124,7 @@ def main_logit_growth(
             dbname=os.getenv("DB_NAME"),
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PWD"),
-            host="publications-db"
+            host="localhost"
         ) as conn:
             logger.info(f"Successfully established connection to: '{str(conn)}'")
 
@@ -165,7 +165,7 @@ def main_logit_growth(
 
 
 if __name__ == "__main__":
-
+    main_logit_growth()
     main_logit_growth.deploy(
         name="headline-analytics-logit-model",
         work_pool_name="docker-pool",

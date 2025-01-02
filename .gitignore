@@ -156,3 +156,4 @@ cython_debug/
 
 # Configuration
 config/
+.Rproj.user
