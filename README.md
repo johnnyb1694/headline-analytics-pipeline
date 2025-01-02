@@ -17,7 +17,7 @@ For example, here are the top 10 trending topics for the period 1st July 2024 to
 as determined by the logistic growth model that is embedded inside this analytics pipeline,
 
 <div align="center"> 
-  <img src="src/view/plots/top_trending_202501.png" alt="Diagram showing top 10 trending terms for 1st January 2025" style="border-radius: 15px;" width="70%" >
+  <img src="src/view/plots/top_trending_202501.png" alt="Diagram showing top 10 trending terms for 1st January 2025" style="border-radius: 15px;" width="90%" >
     <p><em>Figure: top 10 trending topics from 1st July 2024 to the 1st January 2025</em></p>
 </div>
 
