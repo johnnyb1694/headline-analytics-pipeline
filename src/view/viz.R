@@ -78,4 +78,5 @@ top_trending_df |>
        subtitle = "Jimmy Carter amongst other candidates for top trending topic",
        caption = "Source: New York Times API (Archive Search)") +
   scale_colour_brewer(type = 'div', palette = 'Set3') +
-  theme_minimal()
+  theme_minimal() +
+  theme(plot.title = element_text(face="bold"))

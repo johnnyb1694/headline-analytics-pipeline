@@ -8,7 +8,7 @@ WITH ranked_topics AS (
     JOIN model.run mr ON mo.model_run_id = mr.model_run_id
     WHERE max_publication_date = {as_at}
     -- Filter out models with relatively high volatility (standard error)
-    AND mo.rse_time < 1.50
+    AND mo.rse_time < 0.30
     -- Filter out 'months' (technical debt; should be eliminated earlier on)
     AND mo.headline_term NOT IN (
         'january', 
