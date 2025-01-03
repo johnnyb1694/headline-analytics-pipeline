@@ -66,12 +66,12 @@ top_trending_df <- get_top_trending(conn)
 
 growth_theme <- construct_viz_theme()
 
-top_trending_df |>
+plot <- top_trending_df |>
   ggplot(mapping = aes(publication_date, relative_frequency, colour = headline_term)) +
   geom_line(alpha = 0.80, show.legend = FALSE, linewidth = 1.2) +
   facet_wrap(~headline_term) +
   scale_y_continuous(labels = scales::percent_format()) +
-  labs(x = "Time (days since new year)",
+  labs(x = NULL,
        y = "Relative frequency",
        colour = "Term",
        title = "Trending topics as at '2025-01-01' (to 6 months prior)",
@@ -80,3 +80,9 @@ top_trending_df |>
   scale_colour_brewer(type = 'div', palette = 'Set3') +
   theme_minimal() +
   theme(plot.title = element_text(face="bold"))
+
+ggplot2::ggsave(
+  filename="./plots/top_trending_202501.png",
+  plot = plot,
+  dpi = 300
+)

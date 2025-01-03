@@ -25,7 +25,7 @@ as determined by the logistic growth model that is embedded inside this analytic
 
 <div align="center"> 
   <img src="docs/diagrams/model-architecture-overview.drawio.png" alt="Diagram showing architecture of modelling software" style="border-radius: 15px;" width="90%" >
-    <p><em>Figure: architecture of the EtLT pipeline and associated views ('Interface')</em></p>
+    <p><em>Figure: architecture of the EtLT pipeline and associated views ('Interface'). Icons sourced from <a href="flaticon.com">flaticon.com</a></em></p>
 </div>
 
 The specific architectural decisions made above are expounded upon in slightly more detail in [docs/Architecture.md](docs/Architecture.md)
