@@ -17,7 +17,7 @@ For example, here are the top 10 trending topics in the New York Times for the p
 as determined by the logistic growth model that is embedded inside this analytics pipeline,
 
 <div align="center"> 
-  <img src="src/view/plots/top_trending_202501.png" alt="Diagram showing top 10 trending terms for 1st January 2025" style="border-radius: 15px;" width="90%" >
+  <img src="src/view/plots/top_trending_202501.png" alt="Diagram showing top 10 trending terms for 1st January 2025" style="border-radius: 15px;" width="70%" >
     <p><em>Figure: top 10 trending topics from 1st July 2024 to the 1st January 2025</em></p>
 </div>
 
