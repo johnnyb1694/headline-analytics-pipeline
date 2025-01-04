@@ -62,9 +62,11 @@ construct_viz_theme <- function() {
 
 conn <- open_connection(user = Sys.getenv("DB_USER"), password = Sys.getenv("DB_PWD"))
 
-top_trending_df <- get_top_trending(conn)
-
 growth_theme <- construct_viz_theme()
+
+# 1: Growing
+
+top_trending_df <- get_top_trending(conn)
 
 plot <- top_trending_df |>
   ggplot(mapping = aes(publication_date, relative_frequency, colour = headline_term)) +
@@ -83,6 +85,31 @@ plot <- top_trending_df |>
 
 ggplot2::ggsave(
   filename="./plots/top_trending_202501.png",
+  plot = plot,
+  dpi = 300
+)
+
+# 2: Shrinking
+
+top_shrinking_df <- get_top_trending(conn, sql_template = "shrinking_topics.sql")
+
+plot <- top_shrinking_df |>
+  ggplot(mapping = aes(publication_date, relative_frequency, colour = headline_term)) +
+  geom_line(alpha = 0.80, show.legend = FALSE, linewidth = 1.2) +
+  facet_wrap(~headline_term) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = NULL,
+       y = "Relative frequency",
+       colour = "Term",
+       title = "Shrinking topics as at '2025-01-01' (to 6 months prior)",
+       subtitle = "Hurricane 'Helene', Kamala and Rafah are fading from the headlines",
+       caption = "Source: New York Times API (Archive Search)") +
+  scale_colour_brewer(type = 'div', palette = 'Set3') +
+  theme_minimal() +
+  theme(plot.title = element_text(face="bold"))
+
+ggplot2::ggsave(
+  filename="./plots/top_shrinking_202501.png",
   plot = plot,
   dpi = 300
 )
