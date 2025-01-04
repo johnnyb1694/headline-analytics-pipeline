@@ -64,7 +64,7 @@ This is, of course, perhaps a case to containerise the entire solution (not just
 
 ## Setup :wrench:
 
-To configure the ELT pipeline and the logistic growth model in your local environment, you must observe the following steps,
+To configure the ELT pipeline and the logistic growth model in your local environment, you must observe the following steps:
 
 1. Clone this repository into your local area
 2. Configure Python dependencies by running: 
@@ -80,6 +80,8 @@ To configure the ELT pipeline and the logistic growth model in your local enviro
     ```
     docker compose up -d
     ```
+    Note that this relies on certain 'secrets' being setup beforehand. You can read more about this 
+    on Docker's official website: https://docs.docker.com/compose/how-tos/use-secrets/
 4. (Optional) If running on MacOS, export `DOCKER_HOST` environment variable and authenticate with
 Docker Hub from within your local environment (depends on OS and setup; running `docker context ls` will show you what to export)
     ````
@@ -97,7 +99,17 @@ Docker Hub from within your local environment (depends on OS and setup; running 
     ````
     prefect worker start --pool docker-pool
     ````
-8. Finally, you may deploy the ELT pipeline & the logistic growth model by running,
+8. Before deploying the solution you will need to configure certain environment variables,
+    ```
+    NYTAS_API_KEY=<XXX>  
+    DB_NAME=<XXX>
+    DB_USER=<XXX>
+    DB_PWD=<XXX> 
+    DB_HOST=<XXX>
+    DB_PORT=<XXX>
+    ```
+    See step 3 (Docker) for more information on variables of the format `DB_*`
+9. You can now deploy the ELT pipeline & the logistic growth model by running,
     ```
     # ELT
     python _pipeline_deploy.py
