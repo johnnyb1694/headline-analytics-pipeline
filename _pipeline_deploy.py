@@ -89,7 +89,7 @@ from _pipeline_tasks import (
     ingest_nytas_archive,
     trigger_dbt_flow
 )
-from psycopg2.errors import DatabaseError
+from psycopg2.errors import DatabaseError, OperationalError
 load_dotenv()
 
 
@@ -114,40 +114,43 @@ def main_nytas(
     source_staging_path = f"{year}_{month}_nytas.csv"
 
     # Run
-    logger.info(f"Configuring database connection")
-    with establish_dwh_connection(
-        dbname=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PWD"),
-        host="publications-db"
-    ) as conn:
+    try:
         
-        try:
-                logger.info(f"Successfully established connection to: '{str(conn)}'")
+        logger.info(f"Configuring database connection")
+        with establish_dwh_connection(
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PWD"),
+            host="publications-db"
+        ) as conn:
+            logger.info(f"Successfully established connection to: '{str(conn)}'")
 
-                logger.info(f"Staging data from NYT Archive Search locally @ '{source_staging_path}'")
-                stage_nytas_archive_to_csv(
-                    nytas_api_key=os.getenv("NYTAS_API_KEY"),
-                    year=year,
-                    month=month,
-                    staging_path=source_staging_path
-                )
+            logger.info(f"Staging data from NYT Archive Search locally @ '{source_staging_path}'")
+            stage_nytas_archive_to_csv(
+                nytas_api_key=os.getenv("NYTAS_API_KEY"),
+                year=year,
+                month=month,
+                staging_path=source_staging_path
+            )
 
-                logger.info(f"Ingesting data @ '{source_staging_path}' into Postgres database @ '{str(conn)}'")
-                ingest_nytas_archive(
-                    conn=conn,
-                    source_path=source_staging_path
-                )
+            logger.info(f"Ingesting data @ '{source_staging_path}' into Postgres database @ '{str(conn)}'")
+            ingest_nytas_archive(
+                conn=conn,
+                source_path=source_staging_path
+            )
 
-                logger.info(f"Running `dbt` transformation models")
-                trigger_dbt_flow()
-
-        except DatabaseError as e:
-            conn.rollback()
-            logger.error(f"ELT pipeline encountered a fatal database error: '{str(e)}'")
-        else:
-            conn.commit()
-        finally:
+            logger.info(f"Running `dbt` transformation models")
+            trigger_dbt_flow()
+    
+    except OperationalError as e:
+        logger.error(f"Connectivity could not be established to DWH: '{str(e)}'")
+    except DatabaseError as e:
+        conn.rollback()
+        logger.error(f"ELT pipeline encountered a fatal database error: '{str(e)}'")
+    else:
+        conn.commit()
+    finally:
+        if conn:
             conn.close()
 
 
