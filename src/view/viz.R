@@ -68,7 +68,7 @@ growth_theme <- construct_viz_theme()
 
 top_trending_df <- get_top_trending(conn)
 
-plot <- top_trending_df |>
+top_trending_plot <- top_trending_df |>
   ggplot(mapping = aes(publication_date, relative_frequency, colour = headline_term)) +
   geom_line(alpha = 0.80, show.legend = FALSE, linewidth = 1.2) +
   facet_wrap(~headline_term) +
@@ -85,7 +85,7 @@ plot <- top_trending_df |>
 
 ggplot2::ggsave(
   filename="./plots/top_trending_202501.png",
-  plot = plot,
+  plot = top_trending_plot,
   dpi = 300
 )
 
@@ -93,7 +93,7 @@ ggplot2::ggsave(
 
 top_shrinking_df <- get_top_trending(conn, sql_template = "shrinking_topics.sql")
 
-plot <- top_shrinking_df |>
+top_shrinking_plot <- top_shrinking_df |>
   ggplot(mapping = aes(publication_date, relative_frequency, colour = headline_term)) +
   geom_line(alpha = 0.80, show.legend = FALSE, linewidth = 1.2) +
   facet_wrap(~headline_term) +
@@ -110,6 +110,6 @@ plot <- top_shrinking_df |>
 
 ggplot2::ggsave(
   filename="./plots/top_shrinking_202501.png",
-  plot = plot,
+  plot = top_shrinking_plot,
   dpi = 300
 )
