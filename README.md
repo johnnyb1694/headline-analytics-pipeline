@@ -118,6 +118,9 @@ Docker Hub from within your local environment (depends on OS and setup; running 
     python _logit_deploy.py
     ```
 
+You should be able to then run the flows manually using `tools/_pipeline_run.py` or `tools/_logit_run.py` after 
+following these steps! However, they will be deployed on a monthly schedule by default :smile:
+
 ## Lessons Learned
 
 Some items of difficulty which came up (that I did not expect),
