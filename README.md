@@ -13,12 +13,23 @@ You can understand topic trends by fitting a [logistic growth model](https://sit
 coefficient (calculated across each topic) informs us the degree to which each topic is trending
 or shrinking in popularity.
 
+### Growing Topics :chart_with_upwards_trend:
+
 For example, here are the top 10 trending topics in the New York Times for the period 1st July 2024 to 1st January 2025
 as determined by the logistic growth model that is embedded inside this analytics pipeline,
 
 <div align="center"> 
   <img src="src/view/plots/top_trending_202501.png" alt="Diagram showing top 10 trending terms for 1st January 2025" style="border-radius: 15px;" width="70%" >
     <p><em>Figure: top 10 trending topics from 1st July 2024 to the 1st January 2025</em></p>
+</div>
+
+### Shrinking Topics :chart_with_downwards_trend:
+
+Conversely, here are the top 10 _shrinking_ topics for the same publication period,
+
+<div align="center"> 
+  <img src="src/view/plots/top_shrinking_202501.png" alt="Diagram showing top 10 shrinking terms for 1st January 2025" style="border-radius: 15px;" width="70%" >
+    <p><em>Figure: top 10 shrinking topics from 1st July 2024 to the 1st January 2025</em></p>
 </div>
 
 ## Architecture 🌃
