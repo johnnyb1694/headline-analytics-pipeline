@@ -3,8 +3,13 @@
 import psycopg2
 import tempfile
 import pandas as pd
+import logging
 
 from psycopg2 import sql
+from psycopg2.errors import OperationalError
+
+
+logger = logging.getLogger(__name__)
 
 
 def open_connection(
@@ -23,14 +28,19 @@ def open_connection(
     :param port: port on which the database listens for incoming connections, defaults to 5432
     :return: a connection object
     """
-    conn_params = { 
-        "dbname": dbname, 
-        "user": user, 
-        "password": password, 
-        "host": host, 
-        "port": str(port)
-    }
-    return psycopg2.connect(**conn_params)
+    conn = None
+    try:
+        conn_params = { 
+            "dbname": dbname, 
+            "user": user, 
+            "password": password, 
+            "host": host, 
+            "port": str(port)
+        }
+        conn = psycopg2.connect(**conn_params)
+    except OperationalError as e:
+        logging.error(f"Connectivity could not be established to DWH: '{str(e)}'")
+    return conn
 
 
 def read_sql(
@@ -53,4 +63,10 @@ def read_sql(
 
 
 if __name__ == "__main__":
-    pass
+    
+    open_connection(
+        'publications',
+        'adopajwd',
+        'adkaworkwa',
+        'localhost'
+    )

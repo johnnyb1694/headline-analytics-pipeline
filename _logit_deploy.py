@@ -92,6 +92,7 @@ from _logit_tasks import (
     fit_logit_batch,
     ingest_logit_outputs
 )
+from psycopg2.errors import DatabaseError
 load_dotenv()
 
 
@@ -118,14 +119,15 @@ def main_logit_growth(
     staging_path = f"{str(logit_start_date)}_{str(logit_end_date)}_logit_out.csv"
 
     # Run
-    try:
-        logger.info(f"Configuring database connection")
-        with establish_dwh_connection(
-            dbname=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PWD"),
-            host="localhost"
-        ) as conn:
+    logger.info(f"Configuring database connection")
+    with establish_dwh_connection(
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PWD"),
+        host="localhost"
+    ) as conn:
+        
+        try:
             logger.info(f"Successfully established connection to: '{str(conn)}'")
 
             existing_model_run_id = get_model_run_id(conn, str(logit_start_date), str(logit_end_date))
@@ -154,18 +156,17 @@ def main_logit_growth(
                 conn,
                 staging_path
             )
-            
-    except Exception as e:
-        conn.rollback()
-        logger.error(f"Logistic fitting exercise encountered a fatal error: '{str(e)}'")
-    else:
-        conn.commit()
-    finally:
-        conn.close()
+        except DatabaseError as e:
+            conn.rollback()
+            logger.error(f"Logistic fitting exercise encountered a fatal database error: '{str(e)}'")
+        else:
+            conn.commit()
+        finally:
+            conn.close()
 
 
 if __name__ == "__main__":
-    main_logit_growth()
+
     main_logit_growth.deploy(
         name="headline-analytics-logit-model",
         work_pool_name="docker-pool",
