@@ -17,7 +17,7 @@ For example, here are the top 10 trending topics in the New York Times for the p
 as determined by the logistic growth model that is embedded inside this analytics pipeline,
 
 <div align="center"> 
-  <img src="src/view/plots/top_trending_202501.png" alt="Diagram showing top 10 trending terms for 1st January 2025" style="border-radius: 15px;" width="90%" >
+  <img src="src/view/plots/top_trending_202501.png" alt="Diagram showing top 10 trending terms for 1st January 2025" style="border-radius: 15px;" width="70%" >
     <p><em>Figure: top 10 trending topics from 1st July 2024 to the 1st January 2025</em></p>
 </div>
 
@@ -126,9 +126,9 @@ following these steps! However, they will be deployed on a monthly schedule by d
 Some items of difficulty which came up (that I did not expect),
 
 * Networking is a subject in itself. I *did* eventually work out how to integrate all of my containers (and the Prefect orchestration process) so that they could all communicate but it took a lot of fiddling around!
-* Prefect is amazing and I love the community they have built on Slack; however, if you were building a
+* Prefect is amazing and I love the community they have built on Slack; if you were building a
 process in-house you might consider Airflow purely because the community is much
-larger and problems can often be solved quicker. That said, I do think Prefect is an amazing 'lean'
+larger and problems can often be solved quicker (I have not personally used Airflow so I cannot comment on this). That said, I really like the Prefect community and I do think Prefect is an amazing 'lean'
 product - it reminded me of toying about with `flask` in days gone by 
 * It goes without saying that I would *not* endorse running an integral data warehouse like this inside a Postgres container. Whilst the data can be backed up, with a greater amount of capital, you're better off hosting this data in AWS Redshift, or Snowflake and the like
 
