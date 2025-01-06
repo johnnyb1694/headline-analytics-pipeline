@@ -145,6 +145,7 @@ product - it reminded me of toying about with `flask` in days gone by
 
 Some things that are left TODO include,
 
+* Add more unit tests. If this were an enterprise-grade project, there would be more testing baked into this but I have not been quite as diligent here in the absence of time
 * Configure a proper interface for the output. At the moment we just spit out data visualisations as `.png` files. It might be nice to create a very simple dashboard instead, although I am profesionally very cautious when it comes to pointless dashboards, hence the initial hesitation here!
 * Incorporate other media outlets into the data pipeline. At the moment, this pipeline focuses solely
 on the New York Times archive but other outlets (such as the Guardian) offer similar API endpoints
