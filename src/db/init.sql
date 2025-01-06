@@ -19,9 +19,6 @@ for us automatically.
 -- Container for all raw data that is 'staged' by the running process
 CREATE SCHEMA raw;
 
--- Container for all metadata
-CREATE SCHEMA meta;
-
 -- Container for all model-related outputs and other relevant data
 CREATE SCHEMA model;
 
@@ -37,18 +34,6 @@ CREATE TABLE raw.nytas (
     news_desk VARCHAR(100),
     url VARCHAR(2083), -- NB: maximum URL length in most browsers
     _etl_loaded_at_date TIMESTAMP DEFAULT NOW()
-);
-
--- Logs ELT pipeline metadata 
-CREATE TABLE meta.batch (
-    batch_id SERIAL PRIMARY KEY,
-    created_by VARCHAR(50),
-    created_at TIMESTAMP NOT NULL,
-    status VARCHAR(20),
-    runtime_seconds REAL NOT NULL, -- NB: 4-byte floating-point number
-    valid BIT NOT NULL,
-    narrative VARCHAR(255),
-    CONSTRAINT uc_batch UNIQUE (created_at, status, valid)
 );
 
 -- Logs metadata on when the trending algorithm was run (and with which publication date params)
